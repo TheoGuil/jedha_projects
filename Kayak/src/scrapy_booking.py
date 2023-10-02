@@ -32,6 +32,12 @@ class ScrapyBooking(scrapy.Spider):
     # Callback used after search
     def after_search(self, response):
         print(response.url)
+
+        # with open('./src/rouen-booking.html', 'w') as fp:
+        #   fp.write(response.text)
+
+        # Normalement dans <div data-capla-component-boundary="b-search-web-searchresults/PropertiesListDesktop"></div>
+
         hotels = response.xpath(
             "/html/body/div[5]/div/div[4]/div[1]/div[1]/div[4]/div[2]/div[2]/div/div/div[3]/div"
         )
@@ -103,3 +109,27 @@ process = CrawlerProcess(
 # Start the crawling using the spider you defined above
 process.crawl(ScrapyBooking)
 process.start()
+
+
+'''
+for quote in quotes:
+            yield {
+                "city": f"{city}",
+                "name": quote.xpath(
+                    'div[1]/div[2]/div/div/div/div[1]/div/div[1]/div/h3/a/div[@data-testid="title"]/text()'
+                ).get(),
+                "url": quote.xpath(
+                    'div[1]/div[2]/div/div/div/div[1]/div/div[1]/div/h3/a[@data-testid="title-link"]/@href'
+                ).get(),
+                "note": quote.xpath(
+                    "div[1]/div[2]/div/div/div/div[2]/div/div[1]/div/a/span/div/div[1]/text()"
+                ).get(),
+            }
+def parse(self, response):
+        yield {
+            "latlong": response.css("a::attr(data-atlas-latlng)").get(),
+            "description": response.xpath(
+                '//div[@id="property_description_content"]/div/p/text()'
+            ).get(),
+        }
+'''
