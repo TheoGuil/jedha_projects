@@ -17,7 +17,9 @@ class ScrapyBooking(scrapy.Spider):
             formdata={
                 "ss": "Rouen",
                 "ssne": "Rouen",
-                "ssne_untouched": "Rouen"
+                "ssne_untouched": "Rouen",
+                "checkin": "2023-12-01",
+                "checkout": "2023-12-02",
             },
             # Function to be called once logged in
             callback=self.after_search,
@@ -25,58 +27,66 @@ class ScrapyBooking(scrapy.Spider):
 
     # Callback used after search
     def after_search(self, response):
-      print(response.url)
-      with open('./src/rouen-booking.html', 'w') as fp:
-        # uncomment if you want empty file
-        fp.write(response.text)
+        print(response.url)
+        with open("./src/rouen-booking.html", "w") as fp:
+            # uncomment if you want empty file
+            fp.write(response.text)
 
-      hotels = response.xpath('//*[@id="search_results_table"]/div[2]/div/div/div[3]/div')
-      print(hotels)
-      testname = response.xpath('//*[@id="search_results_table"]/div[2]/div/div/div[3]/div[3]/div[1]/div[2]/div/div/div/div[1]/div/div[1]/div[1]/h3/a/div[1]/text()')
-      print(testname)
+        hotels = response.xpath(
+            '//*[@id="search_results_table"]/div[2]/div/div/div[3]/div'
+        )
 
-      for hotel in hotels:
-          try:
-            name = hotel.xpath('/div[@data-testid="title"]/text()').get()
-            url = hotel.xpath(
-                "div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a"
-            ).attrib["href"]
-            score = hotel.xpath(
-                "div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]/text()"
-            ).get()
-            # try:
-            #     desc = hotel.xpath(
-            #         "div[1]/div[2]/div/div[2]/div[1]/div/div/div/div/text()"
-            #     ).get()
-            # except:
-            #     desc = None
+        for hotel in hotels:
+            try:
+                name = hotel.xpath(
+                    "div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div[1]/h3/a/div[1]/text()"
+                ).get()
+                url = hotel.xpath(
+                    "div[1]/div[2]/div/div[1]/div/div[1]/div/div[1]/div/h3/a"
+                ).attrib["href"]
+                score = hotel.xpath(
+                    "div[1]/div[2]/div/div[1]/div/div[2]/div/div/div/a/span/div/div[1]/text()"
+                ).get()
+                # try:
+                #     desc = hotel.xpath(
+                #         "div[1]/div[2]/div/div/div/div[1]/div/div[4]/text()"
+                #     ).get()
+                # except:
+                #     desc = None
 
-            # try:
-            #     price = hotel.xpath(
-            #         "div[1]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/text()"
-            #     ).get()
-            # except:
-            #     price = None
+                try:
+                    price = (
+                        hotel.xpath(
+                            "div[1]/div[2]/div/div[2]/div[2]/div/div[1]/div[2]/text()"
+                        )
+                        .get()
+                    )
+                except:
+                    price = None
 
-            yield {
-                "name": name,
-                "url": url,
-                "score": score,
-                # "description": desc,
-                # "price": price,
-            }
-          except Exception as e:
-            print("error")
-            print(e)
-      # Select the NEXT button and store it in next_page
-      # try:
-      #     next_page = response.xpath('/html/body/div/div[2]/div[1]/nav/ul/li[@class="next"]/a').attrib["href"]
-      # except KeyError:
-      #     # In the last page, there won't be any "href" and a KeyError will be raised
-      #     logging.info('No next page. Terminating crawling process.')
-      # else:
-      #     # If a next page is found, execute the parse method once again
-      #     yield response.follow(next_page, callback=self.after_login)
+                print(price)
+
+                yield {
+                    "name": name,
+                    "url": url,
+                    "score": score,
+                    "description": None,
+                    "latitude": None,
+                    "longitude": None,
+                    "price": price,
+                }
+            except Exception as e:
+                pass
+
+        # Select the NEXT button and store it in next_page
+        # try:
+        #     next_page = response.xpath('/html/body/div/div[2]/div[1]/nav/ul/li[@class="next"]/a').attrib["href"]
+        # except KeyError:
+        #     # In the last page, there won't be any "href" and a KeyError will be raised
+        #     logging.info('No next page. Terminating crawling process.')
+        # else:
+        #     # If a next page is found, execute the parse method once again
+        #     yield response.follow(next_page, callback=self.after_login)
 
 
 # Name of the file where the results will be saved
@@ -97,7 +107,7 @@ process = CrawlerProcess(
         },
         "DOWNLOAD_DELAY": 5,
         "AUTOTHROTTLE_ENABLED": True,
-        "COOKIES_ENABLED": False
+        "COOKIES_ENABLED": False,
     }
 )
 
@@ -106,7 +116,7 @@ process.crawl(ScrapyBooking)
 process.start()
 
 
-'''
+"""
 for quote in quotes:
             yield {
                 "city": f"{city}",
@@ -127,4 +137,4 @@ def parse(self, response):
                 '//div[@id="property_description_content"]/div/p/text()'
             ).get(),
         }
-'''
+"""
