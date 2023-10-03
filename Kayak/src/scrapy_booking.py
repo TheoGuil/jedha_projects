@@ -30,7 +30,6 @@ class ScrapyBooking(scrapy.Spider):
         # uncomment if you want empty file
         fp.write(response.text)
 
-                               //*[@id="search_results_table"]/div[2]/div/div/div[3]/div[3]/div[1]/div[2]/div/div/div/div[1]/div/div[1]/div[1]/h3/a/div[1]
       hotels = response.xpath('//*[@id="search_results_table"]/div[2]/div/div/div[3]/div')
       print(hotels)
       testname = response.xpath('//*[@id="search_results_table"]/div[2]/div/div/div[3]/div[3]/div[1]/div[2]/div/div/div/div[1]/div/div[1]/div[1]/h3/a/div[1]/text()')
