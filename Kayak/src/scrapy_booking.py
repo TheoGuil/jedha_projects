@@ -3,6 +3,7 @@ import logging
 import scrapy
 import json
 import sys
+import datetime
 from scrapy.crawler import CrawlerProcess
 
 
@@ -18,8 +19,8 @@ class ScrapyBooking(scrapy.Spider):
                 "ss": city,
                 "ssne": city,
                 "ssne_untouched": city,
-                "checkin": "2023-12-01",
-                "checkout": "2023-12-02",
+                "checkin": (datetime.datetime.now() + datetime.timedelta(days=5)).strftime("%Y-%m-%d"),
+                "checkout": (datetime.datetime.now() + datetime.timedelta(days=6)).strftime("%Y-%m-%d"),
             },
             callback=self.after_search,
         )
