@@ -8,3 +8,4 @@ seaborn
 tensorflow
 plotly
 streamlit
+openpyxl
