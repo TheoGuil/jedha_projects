@@ -1,0 +1,7 @@
+[server]
+headless = true
+runOnSave = true
+fileWatcherType = "poll"
+
+[browser]
+gatherUsageStats = false
