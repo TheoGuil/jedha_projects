@@ -68,7 +68,7 @@ def load_preprocess_data(df):
   df = df.loc[df.previous_ended_rental_id.isna() == False, :]
   df["delay_at_checkout_in_minutes_previous"] = df["delay_at_checkout_in_minutes_previous"].apply(lambda x: x if x > 0 else 0)
   df["delta_checkout_next_checkin"] = (df["time_delta_in_minutes"] - df["delay_at_checkout_in_minutes_previous"]) * -1
-  df["late_for_next_checkin"] = df["delta_checkout_next_checkin"] > 0
+  df["late_for_next_checkin"] = df["delta_checkout_next_checkin"].apply(lambda x: "Impacté" if x > 0 else "Non-impacté")
   df["delta_checkout_next_checkin"] = df["delta_checkout_next_checkin"].apply(late_category)
   df["delta_checkout_next_checkin"] = pd.Categorical(df["delta_checkout_next_checkin"], ordered=True,
                    categories=late_category_ordered)
