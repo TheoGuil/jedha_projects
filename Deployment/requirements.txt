@@ -9,3 +9,5 @@ tensorflow
 plotly
 streamlit
 openpyxl
+fastapi
+uvicorn
