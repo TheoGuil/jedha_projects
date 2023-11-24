@@ -2,7 +2,11 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 import starlette.status as status
+import joblib
+import pandas as pd
 import uvicorn
+
+from car import *
 
 description = """
 **🔹 Description**
@@ -34,15 +38,22 @@ app = FastAPI(
 )
 app.mount("/img", StaticFiles(directory="img"), name="img")
 
+ML_MODEL = joblib.load("ML_models/ridge_cv.pkl")
+
 # Home route redirect to documentation
 @app.get("/", include_in_schema=False)
 def home() -> str:
     return RedirectResponse(url="/documentation", status_code=status.HTTP_302_FOUND)
 
 # Predict route
-@app.post("/predict", tags=["Predict"])
-def predict() -> int:
-    return "Prediction"
+@app.post("/predict")
+def predict(car: Car):
+    '''Predict a price'''
+    # Create a dataframe from the car object
+    df = pd.DataFrame.from_dict(car, orient="columns").T
+    print(df.head())
+    return df.head()
+    
 
 
 # Si le script est exécuté directement (et non importé), lance le serveur
