@@ -32,6 +32,6 @@ uvicorn app:app --port 80 --host 0.0.0.0 --reload
 
 sinon
 ``` shell
-gunicorn api1:app  --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker
+gunicorn app:app  --bind 0.0.0.0:$PORT --worker-class uvicorn.workers.UvicornWorker
 ```
 
