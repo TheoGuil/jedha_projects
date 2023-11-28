@@ -5,6 +5,9 @@ Pour démarrer le projet en dev, il faut téléchargé l'extension `devcontainer
 Une fois installé, il faut `Rebuild and Reopen in container` le container une première fois via les commandes de l'extension. Ensuite il suffira de le `reopen`.
 
 ## Dashboarding
+
+URL : https://theo-jedha-deploy-dash-486bb96ea964.herokuapp.com/
+
 Une fois le container construit, pour démarrer le server streamlit, il faut executer les commandes :
 
 ``` shell
@@ -18,6 +21,9 @@ streamlit run --server.port 80 ./home.py
 le dashboard sera disponible au port défini dans le fichier .devcontainer/devcontainer.json
 
 ## API
+
+URL : https://theo-jedha-deploy-api-60d18a35346f.herokuapp.com/documentation
+
 Pour démarrer le server FastAPI, il faut executer les commandes :
 
 ``` shell
